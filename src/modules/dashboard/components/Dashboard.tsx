@@ -7,7 +7,7 @@ import { DataPoint } from '../../../types';
 
 export const Dashboard = () => {
     const [monthSeries, setMonthSeries] = useState<string[]>([]);
-    const [valueOfPortfolio, setValueOfPortfolio] = useState<number[]>([]);
+    const [valueOfPortfolio, setValueOfPortfolio] = useState<string[]>([]);
 
     useEffect(() => {
         const monthlySalary = 3000;
@@ -19,29 +19,27 @@ export const Dashboard = () => {
         const historicalDataForCake: DataPoint[] = cakeStockData.historical;
         const mapForDataOfCakeStock: any[] = [];
 
+        const monthArray: string[] = [];
+        const valueOfPortfolioArray: string[] = [];
+
         ['17', '18', '19', '20', '21'].forEach((year) => {
             ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].forEach((month) => {
                 const regex = new RegExp(`${month} [0-9]{2}, ${year}`);
                 const dataPointForFirstDayOfMonth = getDataForFirstDayOfMonth(getAllDataPointsForMonth(historicalDataForCake, regex));
                 const dataReturned = getDataToPopulateForMonth(mapForDataOfCakeStock, dataPointForFirstDayOfMonth, portfolioSelected, 'CAKE', fifteenPercentOfSalary);
 
-                if (dataReturned) {
-                    setMonthSeries([
-                        ...monthSeries,
-                        `${month} ${year}`
-                    ]);
 
-                    setValueOfPortfolio([
-                        ...valueOfPortfolio,
-                        dataReturned?.valueOfSharesOwned
-                    ]);
+                if (dataReturned) {
+                    monthArray.push(`${month} ${year}`)
+                    valueOfPortfolioArray.push(dataReturned?.valueOfSharesOwned?.toFixed(2));
 
                     mapForDataOfCakeStock.push(dataReturned);
                 }
             });
         });
 
-        console.log(mapForDataOfCakeStock);
+        setMonthSeries(monthArray);
+        setValueOfPortfolio(valueOfPortfolioArray);
     }, []);
 
     return (
@@ -54,12 +52,15 @@ export const Dashboard = () => {
                         },
                         xaxis: {
                             categories: monthSeries
+                        },
+                        dataLabels: {
+                            enabled: false
                         }
                     }
                 }
                 series={[{ name: 'value of portfolio', data: valueOfPortfolio }]}
                 type="bar"
-            // width="1500"
+                width="1500"
             />
         </React.Fragment>
     );
