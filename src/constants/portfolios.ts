@@ -1,4 +1,6 @@
-export const portfolios: any = {
+import { Portfolio } from "../types";
+
+export const portfolios: Portfolio = {
     "2": [
         {
             "weight": 0.20,
