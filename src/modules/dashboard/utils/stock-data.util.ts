@@ -1,4 +1,4 @@
-import { DataPoint, PortfolioInformationMap, PortfolioItem } from "../../../types";
+import { DataPoint, PortfolioInformationMap } from "../../../types";
 
 export const getAllDataPointsForMonth = (allData: DataPoint[], monthValue: RegExp) => {
     return allData.filter((data) => data?.label?.match(monthValue));
